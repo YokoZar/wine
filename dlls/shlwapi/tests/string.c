@@ -631,6 +631,23 @@ static void test_StrFormatKBSizeA(void)
   }
 }
 
+static void test_StrFromTimeIntervalW(void)
+{
+  WCHAR szBuffW[256];
+  char szBuff[256];
+  const StrFromTimeIntervalResult* result = StrFromTimeInterval_results;
+
+  while(result->ms)
+  {
+    StrFromTimeIntervalW(szBuffW, 256, result->ms, result->digits);
+    WideCharToMultiByte(0,0,szBuffW,-1,szBuff,sizeof(szBuff)/sizeof(WCHAR),0,0);
+
+    ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong\n",
+       result->ms, result->digits);
+    result++;
+  }
+}
+
 static void test_StrFromTimeIntervalA(void)
 {
   char szBuff[256];
@@ -1447,7 +1464,10 @@ START_TEST(string)
   else
     skip("An English UI and locale is required for the StrFormat*Size tests\n");
   if (is_lang_english())
+  {
     test_StrFromTimeIntervalA();
+    test_StrFromTimeIntervalW();
+  }
   else
     skip("An English UI is required for the StrFromTimeInterval tests\n");
 
