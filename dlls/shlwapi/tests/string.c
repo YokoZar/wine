@@ -655,15 +655,15 @@ static void test_StrFromTimeIntervalW(void)
     WideCharToMultiByte(0,0,szBuffW,-1,szBuff,sizeof(szBuff)/sizeof(WCHAR),0,0);
     ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0\n",
        szBuff);
-    todo_wine ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d\n",
+    ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d\n",
        ret);
 
     /* Test NULL string */
     ret = StrFromTimeIntervalW(NULL, 256, result->ms, result->digits);
-    todo_wine ok(ret == result->return_value, "Null buffer should still return %d, got %d\n", 
+    ok(ret == result->return_value, "Null buffer should still return %d, got %d\n", 
        result->return_value, ret);
     ret = StrFromTimeIntervalW(NULL, 0, result->ms, result->digits);
-    todo_wine ok(ret == result->return_value, "Null buffer with cchMax=0 should still return %d, got %d\n", 
+    ok(ret == result->return_value, "Null buffer with cchMax=0 should still return %d, got %d\n", 
        result->return_value, ret);
 
     result++;
@@ -680,7 +680,7 @@ static void test_StrFromTimeIntervalA(void)
   {
     ret = StrFromTimeIntervalA(szBuff, 256, result->ms, result->digits);
 
-    todo_wine ok(ret == result->return_value, "Expected return value of %d, got %d\n",
+    ok(ret == result->return_value, "Expected return value of %d, got %d\n",
        result->return_value, ret);
     ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong: %s\n",
        result->ms, result->digits, szBuff);
@@ -690,15 +690,15 @@ static void test_StrFromTimeIntervalA(void)
     ret = StrFromTimeIntervalA(szBuff, 0, result->ms, result->digits);
     ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0\n",
        szBuff);
-    todo_wine ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d\n",
+    ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d\n",
        ret);
 
     /* Test NULL string */
     ret = StrFromTimeIntervalA(NULL, 256, result->ms, result->digits);
-    todo_wine ok(ret == result->return_value, "Null buffer should still return %d, got %d\n", 
+    ok(ret == result->return_value, "Null buffer should still return %d, got %d\n", 
        result->return_value, ret);
     ret = StrFromTimeIntervalA(NULL, 0, result->ms, result->digits);
-    todo_wine ok(ret == result->return_value, "Null buffer with cchMax=0 should still return %d, got %d\n", 
+    ok(ret == result->return_value, "Null buffer with cchMax=0 should still return %d, got %d\n", 
        result->return_value, ret);
 
     result++;

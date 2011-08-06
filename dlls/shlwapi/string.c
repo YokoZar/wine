@@ -2026,7 +2026,10 @@ static int SHLWAPI_WriteTimeClass(LPWSTR lpszOut, DWORD dwValue,
  *  iDigits  [I] Number of digits to print
  *
  * RETURNS
- *  The length of the formatted string, or 0 if any parameter is invalid.
+ *  The length of the formatted string.
+ *  If lpszStr is Null, returns how long a formatted string would be.
+ *  If cchMax is set to 0 on a non-NULL lpszStr, the string will not be changed
+ *  and the length of the current contents of lpszStr are returned.
  *
  * NOTES
  *  This implementation mimics the Win32 behaviour of always writing a leading
@@ -2048,17 +2051,26 @@ static int SHLWAPI_WriteTimeClass(LPWSTR lpszOut, DWORD dwValue,
 INT WINAPI StrFromTimeIntervalA(LPSTR lpszStr, UINT cchMax, DWORD dwMS,
                                 int iDigits)
 {
-  INT iRet = 0;
+  WCHAR szBuff[128];
 
   TRACE("(%p,%d,%d,%d)\n", lpszStr, cchMax, dwMS, iDigits);
 
+  if (lpszStr && !cchMax)
+    return strlen(lpszStr);
+
+  StrFromTimeIntervalW(szBuff, sizeof(szBuff)/sizeof(WCHAR), dwMS, iDigits);
+
   if (lpszStr && cchMax)
   {
-    WCHAR szBuff[128];
-    StrFromTimeIntervalW(szBuff, sizeof(szBuff)/sizeof(WCHAR), dwMS, iDigits);
     WideCharToMultiByte(CP_ACP,0,szBuff,-1,lpszStr,cchMax,0,0);
+    return strlen(lpszStr);
   }
-  return iRet;
+  else /* lpszStr is NULL */
+  {
+    char szCopy[128];
+    WideCharToMultiByte(CP_ACP,0,szBuff,-1,szCopy,cchMax,0,0);
+    return strlen(szCopy);
+  }
 }
 
 
@@ -2070,43 +2082,45 @@ INT WINAPI StrFromTimeIntervalA(LPSTR lpszStr, UINT cchMax, DWORD dwMS,
 INT WINAPI StrFromTimeIntervalW(LPWSTR lpszStr, UINT cchMax, DWORD dwMS,
                                 int iDigits)
 {
-  INT iRet = 0;
+  WCHAR szCopy[128];
+  DWORD dwHours, dwMinutes;
 
   TRACE("(%p,%d,%d,%d)\n", lpszStr, cchMax, dwMS, iDigits);
 
-  if (lpszStr && cchMax)
+  if (lpszStr && !cchMax)
+    return strlenW(lpszStr);
+
+  if (!iDigits || cchMax == 1)
   {
-    WCHAR szCopy[128];
-    DWORD dwHours, dwMinutes;
-
-    if (!iDigits || cchMax == 1)
-    {
-      *lpszStr = '\0';
-      return 0;
-    }
-
-    /* Calculate the time classes */
-    dwMS = (dwMS + 500) / 1000;
-    dwHours = dwMS / 3600;
-    dwMS -= dwHours * 3600;
-    dwMinutes = dwMS / 60;
-    dwMS -= dwMinutes * 60;
-
-    szCopy[0] = '\0';
-
-    if (dwHours)
-      iDigits = SHLWAPI_WriteTimeClass(szCopy, dwHours, IDS_TIME_INTERVAL_HOURS, iDigits);
-
-    if (dwMinutes && iDigits)
-      iDigits = SHLWAPI_WriteTimeClass(szCopy, dwMinutes, IDS_TIME_INTERVAL_MINUTES, iDigits);
-
-    if (iDigits) /* Always write seconds if we have significant digits */
-      SHLWAPI_WriteTimeClass(szCopy, dwMS, IDS_TIME_INTERVAL_SECONDS, iDigits);
-
-    lstrcpynW(lpszStr, szCopy, cchMax);
-    iRet = strlenW(lpszStr);
+    *lpszStr = '\0';
+    return 0;
   }
-  return iRet;
+
+  /* Calculate the time classes */
+  dwMS = (dwMS + 500) / 1000;
+  dwHours = dwMS / 3600;
+  dwMS -= dwHours * 3600;
+  dwMinutes = dwMS / 60;
+  dwMS -= dwMinutes * 60;
+
+  szCopy[0] = '\0';
+
+  if (dwHours)
+    iDigits = SHLWAPI_WriteTimeClass(szCopy, dwHours, IDS_TIME_INTERVAL_HOURS, iDigits);
+
+  if (dwMinutes && iDigits)
+    iDigits = SHLWAPI_WriteTimeClass(szCopy, dwMinutes, IDS_TIME_INTERVAL_MINUTES, iDigits);
+
+  if (iDigits) /* Always write seconds if we have significant digits */
+    SHLWAPI_WriteTimeClass(szCopy, dwMS, IDS_TIME_INTERVAL_SECONDS, iDigits);
+
+  if (lpszStr)
+  {
+    lstrcpynW(lpszStr, szCopy, cchMax);
+    return strlenW(lpszStr);
+  }
+  else
+    return strlenW(szCopy);
 }
 
 /*************************************************************************
