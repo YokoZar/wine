@@ -653,8 +653,10 @@ static void test_StrFromTimeIntervalW(void)
     MultiByteToWideChar(0,0,"dontchange",-1,szBuffW,sizeof(szBuffW)/sizeof(szBuffW[0]));
     ret = StrFromTimeIntervalW(szBuffW, 0, result->ms, result->digits);
     WideCharToMultiByte(0,0,szBuffW,-1,szBuff,sizeof(szBuff)/sizeof(WCHAR),0,0);
-    todo_wine ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0 (todo)\n",
+    ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0\n",
        szBuff);
+    todo_wine ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d (todo)\n",
+       ret);
 
     result++;
   }
@@ -680,6 +682,8 @@ static void test_StrFromTimeIntervalA(void)
     ret = StrFromTimeIntervalA(szBuff, 0, result->ms, result->digits);
     ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0\n",
        szBuff);
+    todo_wine ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d (todo)\n",
+       ret);
 
     result++;
   }
