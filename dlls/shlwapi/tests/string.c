@@ -648,6 +648,14 @@ static void test_StrFromTimeIntervalW(void)
        result->return_value, ret);
     ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong: %s\n",
        result->ms, result->digits, szBuff);
+
+    /* Test with 0 parameter, this should not change the buffer */
+    MultiByteToWideChar(0,0,"dontchange",-1,szBuffW,sizeof(szBuffW)/sizeof(szBuffW[0]));
+    ret = StrFromTimeIntervalW(szBuffW, 0, result->ms, result->digits);
+    WideCharToMultiByte(0,0,szBuffW,-1,szBuff,sizeof(szBuff)/sizeof(WCHAR),0,0);
+    todo_wine ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0 (todo)\n",
+       szBuff);
+
     result++;
   }
 }
@@ -666,6 +674,13 @@ static void test_StrFromTimeIntervalA(void)
        result->return_value, ret);
     ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong: %s\n",
        result->ms, result->digits, szBuff);
+
+    /* Test with 0 parameter, this should not change the buffer */
+    strcpy(szBuff,"dontchange");
+    ret = StrFromTimeIntervalA(szBuff, 0, result->ms, result->digits);
+    ok(!strcmp("dontchange", szBuff), "Buffer changed to '%s', not supposed to change when cchMax=0\n",
+       szBuff);
+
     result++;
   }
 }
