@@ -141,60 +141,61 @@ typedef struct tagStrFromTimeIntervalResult
   DWORD ms;
   int   digits;
   const char* time_interval;
+  int return_value;
 } StrFromTimeIntervalResult;
 
 
 static const StrFromTimeIntervalResult StrFromTimeInterval_results[] = {
-  { 1, 1, " 0 sec" },
-  { 1, 2, " 0 sec" },
-  { 1, 3, " 0 sec" },
-  { 1, 4, " 0 sec" },
-  { 1, 5, " 0 sec" },
-  { 1, 6, " 0 sec" },
-  { 1, 7, " 0 sec" },
+  { 1, 1, " 0 sec", 6 },
+  { 1, 2, " 0 sec", 6 },
+  { 1, 3, " 0 sec", 6 },
+  { 1, 4, " 0 sec", 6 },
+  { 1, 5, " 0 sec", 6 },
+  { 1, 6, " 0 sec", 6 },
+  { 1, 7, " 0 sec", 6 },
 
-  { 1000000, 1, " 10 min" },
-  { 1000000, 2, " 16 min" },
-  { 1000000, 3, " 16 min 40 sec" },
-  { 1000000, 4, " 16 min 40 sec" },
-  { 1000000, 5, " 16 min 40 sec" },
-  { 1000000, 6, " 16 min 40 sec" },
-  { 1000000, 7, " 16 min 40 sec" },
+  { 1000000, 1, " 10 min", 7 },
+  { 1000000, 2, " 16 min", 7 },
+  { 1000000, 3, " 16 min 40 sec", 14 },
+  { 1000000, 4, " 16 min 40 sec", 14 },
+  { 1000000, 5, " 16 min 40 sec", 14 },
+  { 1000000, 6, " 16 min 40 sec", 14 },
+  { 1000000, 7, " 16 min 40 sec", 14 },
 
-  { 1999999, 1, " 30 min" },
-  { 1999999, 2, " 33 min" },
-  { 1999999, 3, " 33 min 20 sec" },
-  { 1999999, 4, " 33 min 20 sec" },
-  { 1999999, 5, " 33 min 20 sec" },
-  { 1999999, 6, " 33 min 20 sec" },
-  { 1999999, 7, " 33 min 20 sec" },
+  { 1999999, 1, " 30 min", 7 },
+  { 1999999, 2, " 33 min", 7 },
+  { 1999999, 3, " 33 min 20 sec", 14 },
+  { 1999999, 4, " 33 min 20 sec", 14 },
+  { 1999999, 5, " 33 min 20 sec", 14 },
+  { 1999999, 6, " 33 min 20 sec", 14 },
+  { 1999999, 7, " 33 min 20 sec", 14 },
 
-  { 3999997, 1, " 1 hr" },
-  { 3999997, 2, " 1 hr 6 min" },
-  { 3999997, 3, " 1 hr 6 min 40 sec" },
-  { 3999997, 4, " 1 hr 6 min 40 sec" },
-  { 3999997, 5, " 1 hr 6 min 40 sec" },
-  { 3999997, 6, " 1 hr 6 min 40 sec" },
-  { 3999997, 7, " 1 hr 6 min 40 sec" },
+  { 3999997, 1, " 1 hr", 5 },
+  { 3999997, 2, " 1 hr 6 min", 11 },
+  { 3999997, 3, " 1 hr 6 min 40 sec", 18 },
+  { 3999997, 4, " 1 hr 6 min 40 sec", 18 },
+  { 3999997, 5, " 1 hr 6 min 40 sec", 18 },
+  { 3999997, 6, " 1 hr 6 min 40 sec", 18 },
+  { 3999997, 7, " 1 hr 6 min 40 sec", 18 },
 
-  { 149999851, 7, " 41 hr 40 min 0 sec" },
-  { 150999850, 1, " 40 hr" },
-  { 150999850, 2, " 41 hr" },
-  { 150999850, 3, " 41 hr 50 min" },
-  { 150999850, 4, " 41 hr 56 min" },
-  { 150999850, 5, " 41 hr 56 min 40 sec" },
-  { 150999850, 6, " 41 hr 56 min 40 sec" },
-  { 150999850, 7, " 41 hr 56 min 40 sec" },
+  { 149999851, 7, " 41 hr 40 min 0 sec", 19 },
+  { 150999850, 1, " 40 hr", 6 },
+  { 150999850, 2, " 41 hr", 6 },
+  { 150999850, 3, " 41 hr 50 min", 13 },
+  { 150999850, 4, " 41 hr 56 min", 13 },
+  { 150999850, 5, " 41 hr 56 min 40 sec", 20 },
+  { 150999850, 6, " 41 hr 56 min 40 sec", 20 },
+  { 150999850, 7, " 41 hr 56 min 40 sec", 20 },
 
-  { 493999507, 1, " 100 hr" },
-  { 493999507, 2, " 130 hr" },
-  { 493999507, 3, " 137 hr" },
-  { 493999507, 4, " 137 hr 10 min" },
-  { 493999507, 5, " 137 hr 13 min" },
-  { 493999507, 6, " 137 hr 13 min 20 sec" },
-  { 493999507, 7, " 137 hr 13 min 20 sec" },
+  { 493999507, 1, " 100 hr", 7 },
+  { 493999507, 2, " 130 hr", 7 },
+  { 493999507, 3, " 137 hr", 7 },
+  { 493999507, 4, " 137 hr 10 min", 14 },
+  { 493999507, 5, " 137 hr 13 min", 14 },
+  { 493999507, 6, " 137 hr 13 min 20 sec", 21 },
+  { 493999507, 7, " 137 hr 13 min 20 sec", 21 },
 
-  { 0, 0, NULL }
+  { 0, 0, NULL, 0 }
 };
 
 
@@ -636,14 +637,17 @@ static void test_StrFromTimeIntervalW(void)
   WCHAR szBuffW[256];
   char szBuff[256];
   const StrFromTimeIntervalResult* result = StrFromTimeInterval_results;
+  int ret;
 
   while(result->ms)
   {
-    StrFromTimeIntervalW(szBuffW, 256, result->ms, result->digits);
+    ret = StrFromTimeIntervalW(szBuffW, 256, result->ms, result->digits);
     WideCharToMultiByte(0,0,szBuffW,-1,szBuff,sizeof(szBuff)/sizeof(WCHAR),0,0);
 
-    ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong\n",
-       result->ms, result->digits);
+    ok(ret == result->return_value, "Expected return value of %d, got %d\n",
+       result->return_value, ret);
+    ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong: %s\n",
+       result->ms, result->digits, szBuff);
     result++;
   }
 }
@@ -652,11 +656,14 @@ static void test_StrFromTimeIntervalA(void)
 {
   char szBuff[256];
   const StrFromTimeIntervalResult* result = StrFromTimeInterval_results;
+  int ret;
 
   while(result->ms)
   {
-    StrFromTimeIntervalA(szBuff, 256, result->ms, result->digits);
+    ret = StrFromTimeIntervalA(szBuff, 256, result->ms, result->digits);
 
+    todo_wine ok(ret == result->return_value, "Expected return value of %d, got %d (todo)\n",
+       result->return_value, ret);
     ok(!strcmp(result->time_interval, szBuff), "Formatted %d %d wrong: %s\n",
        result->ms, result->digits, szBuff);
     result++;
