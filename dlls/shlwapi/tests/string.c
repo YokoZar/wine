@@ -658,6 +658,14 @@ static void test_StrFromTimeIntervalW(void)
     ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d\n",
        ret);
 
+    /* Test NULL string */
+    ret = StrFromTimeIntervalW(NULL, 256, result->ms, result->digits);
+    ok(ret == result->return_value, "Null buffer should still return %d, got %d\n", 
+       result->return_value, ret);
+    ret = StrFromTimeIntervalW(NULL, 0, result->ms, result->digits);
+    ok(ret == result->return_value, "Null buffer with cchMax=0 should still return %d, got %d\n", 
+       result->return_value, ret);
+
     result++;
   }
 }
@@ -684,6 +692,14 @@ static void test_StrFromTimeIntervalA(void)
        szBuff);
     ok(ret == 10, "Return value should be size of unchanged string, expecting 10 and got %d\n",
        ret);
+
+    /* Test NULL string */
+    ret = StrFromTimeIntervalA(NULL, 256, result->ms, result->digits);
+    ok(ret == result->return_value, "Null buffer should still return %d, got %d\n", 
+       result->return_value, ret);
+    ret = StrFromTimeIntervalA(NULL, 0, result->ms, result->digits);
+    ok(ret == result->return_value, "Null buffer with cchMax=0 should still return %d, got %d\n", 
+       result->return_value, ret);
 
     result++;
   }
